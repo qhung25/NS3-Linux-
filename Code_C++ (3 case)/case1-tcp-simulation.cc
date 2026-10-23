@@ -8,13 +8,23 @@ using namespace ns3;
 
 // Hàm thủ thuật: Chỉ kích hoạt rớt gói 2% sau khi TCP đã kết nối thành công
 void EnableErrorModel(Ptr<NetDevice> device) {
-  Ptr<RateErrorModel> em = CreateObject<RateErrorModel>();
-  em->SetAttribute("ErrorRate", DoubleValue(0.02));
-  device->SetAttribute("ReceiveErrorModel", PointerValue(em));
+    Ptr<RateErrorModel> em = CreateObject<RateErrorModel>();
+    
+    // Thêm dòng này để ns-3 hiểu 2% là rớt theo Gói tin (Packet) chứ không phải Byte
+    em->SetAttribute("ErrorUnit", StringValue("ERROR_UNIT_PACKET")); 
+    
+    em->SetAttribute("ErrorRate", DoubleValue(0.02));
+    device->SetAttribute("ReceiveErrorModel", PointerValue(em));
 }
 
 int main (int argc, char *argv[])
 {
+// Đổi thuật toán TCP sang BBR (hoặc TcpCubic) để chống lại rớt gói ngẫu nhiên
+  Config::SetDefault ("ns3::TcpL4Protocol::SocketType", StringValue ("ns3::TcpBbr"));
+  
+  // Tăng kích thước bộ đệm nhận và gửi lên 1MB để không bị nghẽn cổ chai cục bộ
+  Config::SetDefault ("ns3::TcpSocket::RcvBufSize", UintegerValue (1024 * 1024));
+  Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (1024 * 1024));
   NodeContainer nodes;
   nodes.Create (2);
 
