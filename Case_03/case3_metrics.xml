@@ -1,2 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<SimulationMetrics><Scenario name="case3-http2-tcp-0-0.pcap"><DataPoint time="0" unit="Kbps">867.79</DataPoint><DataPoint time="1" unit="Kbps">7.78</DataPoint></Scenario><Scenario name="case3-http3-quic-0-0.pcap"><DataPoint time="0" unit="Kbps">867.79</DataPoint><DataPoint time="1" unit="Kbps">7.78</DataPoint></Scenario></SimulationMetrics>
